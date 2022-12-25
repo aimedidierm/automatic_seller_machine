@@ -9,10 +9,8 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);   // Create MFRC522 instance.
 
 int Interrupt = 1;
-int sensorPin       = 3;
-int Valve = 6;
-const int red =  4;
-const int buzzer =  2;
+int sensorPin       = 2;
+int Valve = A3;
 float calibrationFactor = 90;
 volatile byte pulseCount = 0;
 float flowRate = 0.0;
@@ -25,7 +23,7 @@ int outml = 0;
 const byte ROWS = 4; //four rows
 const byte COLS = 4; //four columns
 //define the cymbols on the buttons of the keypads
-char newNum[12] = "", amount[12] = "", kwishyuraamount[12] = "", kwiyaboneshaamount[12] = "";
+char newNum[12] = "", amount[12] = "", kwishyuraamount[12] = "";
 //define the cymbols on the buttons of the keypads
 char keys[ROWS][COLS] = {
 
@@ -39,8 +37,8 @@ char keys[ROWS][COLS] = {
 
 };
 
-byte rowPins[ROWS] = {A0, A1, A2, A3}; //connect to the row pinouts of the keypad
-byte colPins[COLS] = {9, 8, 7}; //connect to the column pinouts of the keypad
+byte rowPins[ROWS] = {8, 7, 6, 5}; //connect to the row pinouts of the keypad
+byte colPins[COLS] = {A2, A0, A1}; //connect to the column pinouts of the keypad
 
 String card;
 Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
@@ -57,7 +55,7 @@ void setup()
   SPI.begin();      // Initiate  SPI bus
   mfrc522.PCD_Init();   // Initiate MFRC522
   pinMode(Valve , OUTPUT);
-  digitalWrite(Valve, HIGH);
+  digitalWrite(Valve, LOW);
   pinMode(sensorPin, INPUT);
   digitalWrite(sensorPin, HIGH);
   attachInterrupt(Interrupt, pulseCounter, FALLING);
@@ -79,7 +77,7 @@ void loop()
 void(* resetFunc) (void) = 0;
 
 void drinkout() {
-  digitalWrite(Valve, LOW);
+  digitalWrite(Valve, HIGH);
   while (drinkvolume > 20) {
     if ((millis() - oldTime) > 1000)   // Only process counters once per second
     {
@@ -99,7 +97,7 @@ void drinkout() {
       attachInterrupt(Interrupt, pulseCounter, FALLING);
     }
   }
-  digitalWrite(Valve, HIGH);
+  digitalWrite(Valve, LOW);
   resetFunc();
   delay(3000);
   resetFunc();
@@ -152,7 +150,7 @@ void kwishyura() {
     {
       j = 0;
       lcd.clear();
-      lcd.print("Tegereza");
+      lcd.print("Loading");
       card.replace(" ", "");
       Serial.println((String)"?card=" + card + "&kwishyuraamount=" + kwishyuraamount); //kohereza data kurinodemcu
       while (k == 0) {
@@ -180,10 +178,7 @@ void lowbalance() {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Low balance");
-  digitalWrite(red, HIGH);
-  tone(buzzer, 1000, 1000);
   delay(3000);
-  digitalWrite(red, LOW);
   lcd.clear();
   resetFunc();
 }

@@ -25,11 +25,6 @@ $sql = "SELECT * FROM user";
 $stmt = $db->prepare($sql);
 $stmt->execute();
 $users=$stmt->rowCount();
-
-$sql = "SELECT * FROM sub";
-$stmt = $db->prepare($sql);
-$stmt->execute();
-$subs=$stmt->rowCount();
 ?>
 <!DOCTYPE html>
 <html lang="en">
