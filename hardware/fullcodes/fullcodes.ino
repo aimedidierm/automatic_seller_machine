@@ -151,8 +151,8 @@ void kwishyura() {
       j = 0;
       lcd.clear();
       lcd.print("Loading");
-      card.replace(" ", "");
-      Serial.println((String)"?card=" + card + "&kwishyuraamount=" + kwishyuraamount); //kohereza data kurinodemcu
+      //card.replace(" ", "");
+      Serial.println((String)"{'card':'" + card + "', '" + "kwishyuraamount':" + kwishyuraamount + "}");
       while (k == 0) {
         if (Serial.available() > 0) {
           data = Serial.readStringUntil('\n');

@@ -1,15 +1,12 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
+#include <ArduinoJson.h>
 
-const char* ssid = "A";
-const char* password = "1234567890";
+const char* ssid = "Virus";
+const char* password = "mbega123455";
 
-String serverName = "http://192.168.43.17/smart_public_tape/data.php";
-//String serverName = "http://didier.requestcatcher.com/";
-
-unsigned long lastTime = 0;
-unsigned long timerDelay = 5000;
+String serverName = "http://http://137.184.232.255/automatic_seller_machine/data.php";
 
 void setup() {
   Serial.begin(9600); 
@@ -35,11 +32,13 @@ void loop() {
       WiFiClient client;
       HTTPClient http;
       String data = Serial.readStringUntil('\n');
-      String serverPath = serverName + data;
-      Serial.println(serverPath.c_str());
-      
-      // Your Domain name with URL path or IP address with path
-      http.begin(client, serverPath.c_str());
+      DynamicJsonBuffer jsonBuffer;
+      JsonObject& root = jsonBuffer.parseObject(data);
+      String card = root["card"];
+      String kwishyuraamount = root["kwishyuraamount"];
+      String serverPath = serverName + "?card=" + card + "&kwishyuraamount=" + kwishyuraamount;
+      Serial.println(serverPath);
+      http.begin(client, serverPath);
   
       // If you need Node-RED/server authentication, insert user and password below
       //http.setAuthorization("REPLACE_WITH_SERVER_USERNAME", "REPLACE_WITH_SERVER_PASSWORD");
@@ -63,6 +62,5 @@ void loop() {
     else {
       Serial.println("WiFi Disconnected");
     }
-    lastTime = millis();
   }
 }
