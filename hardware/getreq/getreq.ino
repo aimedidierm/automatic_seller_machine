@@ -3,10 +3,11 @@
 #include <WiFiClient.h>
 #include <ArduinoJson.h>
 
-const char* ssid = "Virus";
-const char* password = "mbega123455";
+const char* ssid = "innovate";
+const char* password = "innovate";
 
-String serverName = "http://http://137.184.232.255/automatic_seller_machine/data.php";
+String serverName = "http://137.184.232.255/automatic_seller_machine/data.php";
+//String serverName = "http://192.168.43.76/automatic_seller_machine/data.php";
 
 void setup() {
   Serial.begin(9600); 
